@@ -34,10 +34,16 @@ export default async function CommissionPage({
 
         {/* Artist Summary */}
         <div className="flex items-center gap-5 mb-12">
-          <div className="w-20 h-20 rounded-full bg-surface-3 border border-border flex items-center justify-center flex-shrink-0">
-            <span className="text-2xl text-accent-from font-display">
-              {artist.name.charAt(0)}
-            </span>
+          <div className="w-20 h-20 rounded-full bg-surface-3 border border-border flex-shrink-0 overflow-hidden">
+            {artist.image ? (
+              <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <span className="text-2xl text-accent-from font-display">
+                  {artist.name.charAt(0)}
+                </span>
+              </div>
+            )}
           </div>
           <div>
             <h1 className="font-display text-3xl text-text-primary">

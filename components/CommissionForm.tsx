@@ -90,14 +90,14 @@ export default function CommissionForm({ artist }: CommissionFormProps) {
           <textarea
             value={vision}
             onChange={(e) =>
-              setVision(e.target.value.slice(0, 500))
+              setVision(e.target.value.slice(0, 100))
             }
             placeholder="Include your name or a line that you want included in your song."
             rows={5}
             className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-secondary/40 focus:outline-none focus:border-accent-from/40 transition-colors resize-none"
           />
           <div className="text-right text-text-secondary text-xs mt-1">
-            {vision.length}/500
+            {vision.length}/100
           </div>
         </div>
         <div>

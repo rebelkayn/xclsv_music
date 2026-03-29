@@ -30,10 +30,10 @@ export default function ArtistCard({ artist, index }: ArtistCardProps) {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ y: 20 }}
+        whileInView={{ y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
+        transition={{ duration: 0.3 }}
         whileHover={{ y: -4 }}
         className="group bg-surface-1 border border-border rounded-2xl p-6 transition-all duration-300 hover:border-accent-from/40 hover:shadow-[0_0_40px_rgba(198,165,92,0.08)]"
       >
@@ -43,6 +43,8 @@ export default function ArtistCard({ artist, index }: ArtistCardProps) {
             <img
               src={artist.image}
               alt={artist.name}
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           ) : (

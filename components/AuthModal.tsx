@@ -12,7 +12,7 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProps) {
-  const [mode, setMode] = useState<"login" | "signup">("signup");
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +20,7 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
   const [loading, setLoading] = useState(false);
 
   const reset = () => {
+    setMode("login");
     setName("");
     setEmail("");
     setPassword("");
@@ -71,8 +72,12 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
       return;
     }
 
-    // Success — navigate to commission page
-    window.location.href = `/commission/${artistSlug}`;
+    // Success — navigate appropriately
+    if (artistSlug) {
+      window.location.href = `/commission/${artistSlug}`;
+    } else {
+      window.location.reload();
+    }
   };
 
   return (
@@ -110,12 +115,12 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="font-display text-2xl text-text-primary mb-2">
-                {mode === "signup" ? "Create Your Account" : "Welcome Back"}
+                {mode === "signup" ? "Create Your Account" : "Access Your Account"}
               </h2>
               <p className="text-text-secondary text-sm">
                 {mode === "signup"
-                  ? (artistSlug ? "Sign up to commission your exclusive song" : "Join the world's most exclusive music platform")
-                  : (artistSlug ? "Log in to continue your commission" : "Access your account")}
+                  ? "Sign up to commission your exclusive song"
+                  : "Sign in to access your music"}
               </p>
             </div>
 
@@ -174,9 +179,7 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
               >
                 {loading
                   ? "Please wait..."
-                  : mode === "signup"
-                    ? "Create Account"
-                    : "Log In"}
+                  : mode === "signup" ? "Create Account" : "Sign In"}
               </Button>
             </div>
 

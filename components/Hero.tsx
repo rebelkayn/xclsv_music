@@ -11,23 +11,9 @@ export default function Hero() {
   const [showAuth, setShowAuth] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const scrollToRoster = () => {
-    document.getElementById("roster")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <>
-    <section className="relative flex flex-col items-center overflow-hidden pt-6 pb-10 md:pt-10 md:pb-14 min-h-[50vh]">
-      {/* Logo */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative z-10 font-display text-2xl tracking-widest bg-gradient-to-r from-accent-from to-accent-to bg-clip-text text-transparent mb-[100px]"
-      >
-        {SITE.name}
-      </motion.div>
-
+    <section className="relative flex flex-col items-center justify-center overflow-hidden py-16 md:py-24 min-h-[50vh]">
       {/* Animated waveform background - client only to avoid hydration mismatch */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.06]">
         {mounted && (
@@ -70,7 +56,7 @@ export default function Hero() {
       {/* Radial gradient overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0A0A0A_70%)]" />
 
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto my-auto">
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -91,12 +77,11 @@ export default function Hero() {
         </motion.div>
       </div>
 
-
       {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-bg to-transparent" />
     </section>
 
-      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
+    <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
     </>
   );
 }

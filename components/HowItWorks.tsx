@@ -6,7 +6,7 @@ export default function HowItWorks() {
   return (
     <SectionWrapper
       title="How It Works"
-      subtitle="Three steps from vision to masterpiece."
+      subtitle="Three steps to collecting your XCLSV song."
       className="bg-surface-1"
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

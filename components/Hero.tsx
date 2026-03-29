@@ -29,7 +29,9 @@ export default function Hero() {
           preserveAspectRatio="none"
         >
           {Array.from({ length: 80 }).map((_, i) => {
-            const height = 20 + Math.sin(i * 0.3) * 60 + Math.random() * 40;
+            const seed = Math.sin(i * 127.1 + 311.7) * 43758.5453;
+            const pseudo = seed - Math.floor(seed);
+            const height = 20 + Math.sin(i * 0.3) * 60 + pseudo * 40;
             return (
               <motion.rect
                 key={i}

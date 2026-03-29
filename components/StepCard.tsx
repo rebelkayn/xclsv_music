@@ -17,8 +17,8 @@ export default function StepCard({ step, index }: StepCardProps) {
       transition={{ duration: 0.5, delay: index * 0.15 }}
       className="flex flex-col items-center text-center"
     >
-      <div className="w-16 h-16 rounded-full bg-surface-2 border border-border flex items-center justify-center text-2xl text-accent-from mb-6">
-        {step.icon}
+      <div className="w-16 h-16 rounded-full bg-surface-2 border border-border flex items-center justify-center text-accent-from mb-6">
+        <span className="text-[28px] leading-none">{step.icon}</span>
       </div>
       <div className="text-text-secondary text-xs tracking-widest uppercase mb-3">
         Step {index + 1}

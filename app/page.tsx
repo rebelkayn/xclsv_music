@@ -1,7 +1,6 @@
 import Hero from "@/components/Hero";
 import ArtistGrid from "@/components/ArtistGrid";
 import HowItWorks from "@/components/HowItWorks";
-import Footer from "@/components/Footer";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +30,6 @@ export default async function Home() {
       <Hero />
       <ArtistGrid artists={formatted} />
       <HowItWorks />
-      <Footer />
     </main>
   );
 }

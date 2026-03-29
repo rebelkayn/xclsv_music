@@ -1,8 +1,7 @@
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
-
-const UPLOAD_DIR = path.join(process.cwd(), "public/uploads");
+import { supabase } from "./supabase";
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -30,13 +29,34 @@ export async function saveUploadedFile(
 
   const ext = file.name.split(".").pop() || "bin";
   const filename = `${randomUUID()}.${ext}`;
-  const dir = path.join(UPLOAD_DIR, subfolder);
 
+  // Audio → Supabase Storage (private bucket, streamed via /api/stream)
+  if (subfolder === "audio") {
+    const storagePath = `audio/${filename}`;
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const { error } = await supabase.storage
+      .from("music")
+      .upload(storagePath, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      throw new Error(`Upload failed: ${error.message}`);
+    }
+
+    // Return the storage path — served through authenticated /api/stream endpoint
+    return storagePath;
+  }
+
+  // Images → local filesystem (static assets, publicly accessible)
+  const uploadDir = path.join(process.cwd(), "public/uploads");
+  const dir = path.join(uploadDir, subfolder);
   await mkdir(dir, { recursive: true });
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const filepath = path.join(dir, filename);
-  await writeFile(filepath, buffer);
+  await writeFile(path.join(dir, filename), buffer);
 
   return `/uploads/${subfolder}/${filename}`;
 }

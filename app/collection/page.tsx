@@ -1,21 +1,33 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import CollectionCard from "@/components/collector/CollectionCard";
+import CollectionGrid from "@/components/collector/CollectionGrid";
 
 export default async function CollectionPage() {
   const session = await auth();
   const collectorId = session!.user!.id;
 
   const orders = await prisma.order.findMany({
-    where: { collectorId },
+    where: { collectorId, status: { in: ["DELIVERED", "UNLOCKED"] } },
     include: {
       artist: {
         select: { name: true, slug: true, image: true, genre: true },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { deliveredAt: "desc" },
   });
+
+  const tracks = orders.map((order) => ({
+    id: order.id,
+    title: order.vision,
+    artistName: order.artist.name,
+    artistImage: order.artist.image,
+    status: order.status,
+    audioFile: order.audioFile,
+    totalPrice: order.totalPrice / 100,
+    createdAt: order.createdAt.toISOString(),
+    deliveredAt: order.deliveredAt?.toISOString() || null,
+  }));
 
   return (
     <div>
@@ -24,11 +36,11 @@ export default async function CollectionPage() {
           My Collection
         </h1>
         <p className="text-text-secondary text-sm">
-          Your commissioned songs and their status.
+          Your exclusive commissioned songs.
         </p>
       </div>
 
-      {orders.length === 0 ? (
+      {tracks.length === 0 ? (
         <div className="bg-surface-1 border border-border rounded-2xl p-16 text-center">
           <div className="mb-4">
             <svg
@@ -57,24 +69,7 @@ export default async function CollectionPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {orders.map((order) => (
-            <CollectionCard
-              key={order.id}
-              order={{
-                id: order.id,
-                artistName: order.artist.name,
-                artistImage: order.artist.image,
-                artistGenre: order.artist.genre,
-                status: order.status,
-                vision: order.vision,
-                totalPrice: order.totalPrice / 100,
-                createdAt: order.createdAt.toISOString(),
-                deliveredAt: order.deliveredAt?.toISOString() || null,
-              }}
-            />
-          ))}
-        </div>
+        <CollectionGrid tracks={tracks} />
       )}
     </div>
   );

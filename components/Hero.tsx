@@ -1,15 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { SITE } from "@/lib/constants";
 import Button from "./Button";
 import AuthModal from "./AuthModal";
 
 export default function Hero() {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  const handleAccessAccount = () => {
+    if (session) {
+      const dest = (session as any).role === "artist" ? "/dashboard" : "/collection";
+      router.push(dest);
+    } else {
+      setShowAuth(true);
+    }
+  };
 
   return (
     <>
@@ -73,7 +86,7 @@ export default function Hero() {
           <p className="text-text-secondary text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
             {SITE.subline}
           </p>
-          <Button onClick={() => setShowAuth(true)}>Access Account</Button>
+          <Button onClick={handleAccessAccount}>Access Account</Button>
         </motion.div>
       </div>
 

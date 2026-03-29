@@ -69,13 +69,14 @@ export default function ArtistCard({ artist, index }: ArtistCardProps) {
           )}
         </div>
 
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 mb-4">
           <h3 className="font-display text-xl text-text-primary">
             {artist.name}
           </h3>
-          <span className="inline-block text-xs tracking-widest uppercase text-accent-from/80 bg-accent-from/10 px-3 py-1 rounded-full">
-            {artist.genre}
-          </span>
+          <svg width="20" height="20" viewBox="0 0 24 24" className="flex-shrink-0">
+            <circle cx="12" cy="12" r="10" fill="#C6A55C" />
+            <path d="M8.5 12.5l2 2 5-5" stroke="#0A0A0A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </svg>
         </div>
         <p className="text-text-secondary text-sm leading-relaxed mb-6">
           {artist.tagline}

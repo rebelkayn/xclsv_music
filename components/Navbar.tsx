@@ -2,31 +2,38 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SITE } from "@/lib/constants";
 import AuthModal from "./AuthModal";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [showAuth, setShowAuth] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const mobileRef = useRef<HTMLDivElement>(null);
 
-  // Hide on dashboard and login pages (they have their own nav)
-  if (pathname.startsWith("/dashboard") || pathname.startsWith("/collection") || pathname === "/login") return null;
+  const dashboardPath = (session as any)?.role === "artist" ? "/dashboard" : "/collection";
 
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (desktopRef.current && !desktopRef.current.contains(e.target as Node)) {
         setShowDropdown(false);
+      }
+      if (mobileRef.current && !mobileRef.current.contains(e.target as Node)) {
+        setMobileOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
+
+  // Hide on dashboard and login pages (they have their own nav)
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/collection") || pathname === "/login") return null;
 
   return (
     <>
@@ -38,14 +45,13 @@ export default function Navbar() {
           </a>
 
           {/* Desktop — Avatar */}
-          <div className="hidden md:block relative" ref={dropdownRef}>
+          <div className="hidden md:block relative" ref={desktopRef}>
             {session ? (
-              <div
-                className="relative"
-                onMouseEnter={() => setShowDropdown(true)}
-                onMouseLeave={() => setShowDropdown(false)}
-              >
-                <button className="w-9 h-9 rounded-full bg-surface-2 border border-border flex items-center justify-center hover:border-accent-from/40 transition-colors cursor-pointer">
+              <div className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="w-9 h-9 rounded-full bg-surface-2 border border-border flex items-center justify-center hover:border-accent-from/40 transition-colors cursor-pointer"
+                >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-text-secondary">
                     <circle cx="12" cy="8" r="4" />
                     <path d="M5 20c0-3 3-5 7-5s7 2 7 5" />
@@ -60,7 +66,13 @@ export default function Navbar() {
                       <p className="text-text-secondary text-xs truncate">{session.user?.email}</p>
                     </div>
                     <button
-                      onClick={() => signOut({ callbackUrl: "/" })}
+                      onClick={() => { setShowDropdown(false); router.push(dashboardPath); }}
+                      className="w-full text-left px-4 py-2.5 text-text-secondary text-sm hover:text-text-primary hover:bg-surface-2 transition-colors cursor-pointer"
+                    >
+                      My Dashboard
+                    </button>
+                    <button
+                      onClick={() => { setShowDropdown(false); signOut({ callbackUrl: "/" }); }}
                       className="w-full text-left px-4 py-2.5 text-text-secondary text-sm hover:text-text-primary hover:bg-surface-2 transition-colors cursor-pointer"
                     >
                       Sign Out
@@ -85,7 +97,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile — Sign In pill or Avatar */}
-          <div className="md:hidden relative" ref={dropdownRef}>
+          <div className="md:hidden relative" ref={mobileRef}>
             {session ? (
               <div className="relative">
                 <button
@@ -105,10 +117,13 @@ export default function Navbar() {
                       <p className="text-text-secondary text-xs truncate">{session.user?.email}</p>
                     </div>
                     <button
-                      onClick={() => {
-                        signOut({ callbackUrl: "/" });
-                        setMobileOpen(false);
-                      }}
+                      onClick={() => { setMobileOpen(false); router.push(dashboardPath); }}
+                      className="w-full text-left px-4 py-2.5 text-text-secondary text-sm hover:text-text-primary hover:bg-surface-2 transition-colors cursor-pointer"
+                    >
+                      My Dashboard
+                    </button>
+                    <button
+                      onClick={() => { setMobileOpen(false); signOut({ callbackUrl: "/" }); }}
                       className="w-full text-left px-4 py-2.5 text-text-secondary text-sm hover:text-text-primary hover:bg-surface-2 transition-colors cursor-pointer"
                     >
                       Sign Out

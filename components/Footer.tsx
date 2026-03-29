@@ -1,6 +1,13 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/constants";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/collection") || pathname === "/login") return null;
+
   return (
     <footer className="border-t border-border py-12 px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
@@ -11,16 +18,13 @@ export default function Footer() {
           <p className="text-text-secondary text-xs mt-1">{SITE.tagline}</p>
         </div>
         <div className="flex gap-8 text-text-secondary text-xs tracking-wider uppercase">
-          <a href="#" className="hover:text-text-primary transition-colors">
-            About
-          </a>
-          <a href="#" className="hover:text-text-primary transition-colors">
+          <a href="/terms" className="hover:text-text-primary transition-colors">
             Terms
           </a>
-          <a href="#" className="hover:text-text-primary transition-colors">
+          <a href="/privacy" className="hover:text-text-primary transition-colors">
             Privacy
           </a>
-          <a href="#" className="hover:text-text-primary transition-colors">
+          <a href="/contact" className="hover:text-text-primary transition-colors">
             Contact
           </a>
         </div>

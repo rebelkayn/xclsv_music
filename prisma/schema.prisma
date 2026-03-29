@@ -34,6 +34,17 @@ model Collector {
   orders    Order[]
 }
 
+model ArtistInquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  genre     String
+  instagram String?
+  spotify   String?
+  message   String?
+  createdAt DateTime @default(now())
+}
+
 model Order {
   id                String     @id @default(cuid())
   artist            Artist     @relation(fields: [artistId], references: [id])

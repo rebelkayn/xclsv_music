@@ -77,12 +77,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token) {
-        (session as Record<string, unknown>).role = token.role;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const s = session as any;
+        s.role = token.role;
         if (token.role === "artist") {
-          session.user.id = token.artistId as string;
-          (session as Record<string, unknown>).artistSlug = token.artistSlug;
+          s.user.id = token.artistId as string;
+          s.artistSlug = token.artistSlug;
         } else if (token.role === "collector") {
-          session.user.id = token.collectorId as string;
+          s.user.id = token.collectorId as string;
         }
       }
       return session;

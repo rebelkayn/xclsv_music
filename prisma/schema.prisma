@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Artist {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  email     String   @unique
+  password  String
+  genre     String
+  tagline   String
+  price     Int      @default(10000000)
+  image     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Order {
+  id                String    @id @default(cuid())
+  artist            Artist    @relation(fields: [artistId], references: [id])
+  artistId          String
+  status            String    @default("DEPOSITED")
+  collectorName     String
+  collectorEmail    String
+  vision            String
+  occasion          String
+  totalPrice        Int
+  depositPaid       Int       @default(0)
+  balancePaid       Int       @default(0)
+  audioFile         String?
+  previewFile       String?
+  createdAt         DateTime  @default(now())
+  estimatedDelivery DateTime
+  deliveredAt       DateTime?
+}

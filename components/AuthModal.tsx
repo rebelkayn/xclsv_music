@@ -8,7 +8,7 @@ import Button from "./Button";
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  artistSlug: string;
+  artistSlug?: string;
 }
 
 export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProps) {
@@ -18,7 +18,6 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const reset = () => {
     setName("");
@@ -96,7 +95,7 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md bg-surface-1 border border-border rounded-2xl p-8"
+            className="relative z-10 w-full max-w-md bg-surface-1 border border-border rounded-2xl p-8 max-h-[90vh] overflow-y-auto"
           >
             {/* Close button */}
             <button
@@ -115,8 +114,8 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
               </h2>
               <p className="text-text-secondary text-sm">
                 {mode === "signup"
-                  ? "Sign up to commission your exclusive song"
-                  : "Log in to continue your commission"}
+                  ? (artistSlug ? "Sign up to commission your exclusive song" : "Join the world's most exclusive music platform")
+                  : (artistSlug ? "Log in to continue your commission" : "Access your account")}
               </p>
             </div>
 
@@ -154,35 +153,14 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
                 <label className="block text-text-secondary text-xs tracking-widest uppercase mb-2">
                   Password
                 </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                    autoComplete="off"
-                    data-1p-ignore
-                    className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 pr-12 text-text-primary placeholder:text-text-secondary/40 focus:outline-none focus:border-accent-from/40 transition-colors [&::-webkit-credentials-auto-fill-button]:hidden [&::-webkit-textfield-decoration-container]:hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
-                  >
-                    {showPassword ? (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
-                        <line x1="1" y1="1" x2="23" y2="23" />
-                      </svg>
-                    ) : (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                  className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-secondary/40 focus:outline-none focus:border-accent-from/40 transition-colors"
+                />
               </div>
 
               {error && (

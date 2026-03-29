@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import type { Artist } from "@/types";
 import { formatPrice, occasions } from "@/lib/constants";
 import Button from "./Button";
@@ -12,8 +13,16 @@ interface CommissionFormProps {
 }
 
 export default function CommissionForm({ artist }: CommissionFormProps) {
+  const { data: session } = useSession();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.name && !name) setName(session.user.name);
+      if (session.user.email && !email) setEmail(session.user.email);
+    }
+  }, [session]);
   const [vision, setVision] = useState("");
   const [occasion, setOccasion] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(false);
@@ -68,9 +77,10 @@ export default function CommissionForm({ artist }: CommissionFormProps) {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            readOnly={!!session?.user?.email}
+            onChange={(e) => !session?.user?.email && setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-secondary/40 focus:outline-none focus:border-accent-from/40 transition-colors"
+            className={`w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-secondary/40 focus:outline-none focus:border-accent-from/40 transition-colors ${session?.user?.email ? "opacity-60 cursor-not-allowed" : ""}`}
           />
         </div>
         <div>

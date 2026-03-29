@@ -3,7 +3,7 @@ import { SITE } from "@/lib/constants";
 export default function Footer() {
   return (
     <footer className="border-t border-border py-12 px-6">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
         <div>
           <div className="font-display text-xl bg-gradient-to-r from-accent-from to-accent-to bg-clip-text text-transparent">
             {SITE.name}

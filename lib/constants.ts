@@ -17,7 +17,7 @@ export const steps: Step[] = [
     icon: "◆",
   },
   {
-    title: "Submit Your Vision",
+    title: "Personalize Your Song",
     description:
       "Drop your name or a line you want included and the artist will work it into the song. Every commission is crafted exclusively for you.",
     icon: "✦",

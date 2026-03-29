@@ -23,11 +23,23 @@ model Artist {
   orders    Order[]
 }
 
+model Collector {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
 model Order {
-  id                String    @id @default(cuid())
-  artist            Artist    @relation(fields: [artistId], references: [id])
+  id                String     @id @default(cuid())
+  artist            Artist     @relation(fields: [artistId], references: [id])
   artistId          String
-  status            String    @default("DEPOSITED")
+  collector         Collector? @relation(fields: [collectorId], references: [id])
+  collectorId       String?
+  status            String     @default("DEPOSITED")
   collectorName     String
   collectorEmail    String
   vision            String

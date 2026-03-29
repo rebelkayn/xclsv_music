@@ -18,7 +18,7 @@ export default function SectionWrapper({
   className = "",
 }: SectionWrapperProps) {
   return (
-    <section id={id} className={`py-24 px-6 ${className}`}>
+    <section id={id} className={`px-6 ${className.includes('pt-') ? '' : 'pt-24'} ${className.includes('pb-') ? '' : 'pb-24'} ${className}`}>
       <div className="max-w-7xl mx-auto">
         {title && (
           <motion.div

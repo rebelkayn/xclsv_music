@@ -14,45 +14,76 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
+        const email = credentials.email as string;
+        const password = credentials.password as string;
+
+        // Check Artist table first
         const artist = await prisma.artist.findUnique({
-          where: { email: credentials.email as string },
+          where: { email },
         });
 
-        if (!artist) return null;
+        if (artist) {
+          const isValid = await compare(password, artist.password);
+          if (!isValid) return null;
+          return {
+            id: artist.id,
+            email: artist.email,
+            name: artist.name,
+            image: artist.image,
+          };
+        }
 
-        const isValid = await compare(
-          credentials.password as string,
-          artist.password
-        );
+        // Check Collector table
+        const collector = await prisma.collector.findUnique({
+          where: { email },
+        });
 
-        if (!isValid) return null;
+        if (collector) {
+          const isValid = await compare(password, collector.password);
+          if (!isValid) return null;
+          return {
+            id: collector.id,
+            email: collector.email,
+            name: collector.name,
+          };
+        }
 
-        return {
-          id: artist.id,
-          email: artist.email,
-          name: artist.name,
-          image: artist.image,
-        };
+        return null;
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        // Determine role by checking which table the user belongs to
         const artist = await prisma.artist.findUnique({
           where: { email: user.email! },
         });
         if (artist) {
+          token.role = "artist";
           token.artistId = artist.id;
           token.artistSlug = artist.slug;
+        } else {
+          const collector = await prisma.collector.findUnique({
+            where: { email: user.email! },
+          });
+          if (collector) {
+            token.role = "collector";
+            token.collectorId = collector.id;
+          }
         }
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.artistId as string;
-        (session as unknown as Record<string, unknown>).artistSlug = token.artistSlug;
+        (session as Record<string, unknown>).role = token.role;
+        if (token.role === "artist") {
+          session.user.id = token.artistId as string;
+          (session as Record<string, unknown>).artistSlug = token.artistSlug;
+        } else if (token.role === "collector") {
+          session.user.id = token.collectorId as string;
+        }
       }
       return session;
     },

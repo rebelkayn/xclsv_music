@@ -10,13 +10,13 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative flex flex-col items-center overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 min-h-[70vh]">
+    <section className="relative flex flex-col items-center overflow-hidden pt-6 pb-10 md:pt-10 md:pb-14 min-h-[50vh]">
       {/* Logo */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 font-display text-2xl tracking-widest bg-gradient-to-r from-accent-from to-accent-to bg-clip-text text-transparent mb-auto"
+        className="relative z-10 font-display text-2xl tracking-widest bg-gradient-to-r from-accent-from to-accent-to bg-clip-text text-transparent mb-[100px]"
       >
         {SITE.name}
       </motion.div>
@@ -80,6 +80,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      
       {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-bg to-transparent" />
     </section>

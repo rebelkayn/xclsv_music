@@ -17,7 +17,7 @@ export async function GET(
     where: { id: orderId },
   });
 
-  if (!order || order.artistId !== session.user.id) {
+  if (!order || (order.artistId !== session.user.id && order.collectorId !== session.user.id)) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
 

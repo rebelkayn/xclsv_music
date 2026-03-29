@@ -88,12 +88,16 @@ export default function ProfilePage() {
           <label className="block text-text-secondary text-xs uppercase tracking-wider mb-2">
             Genre
           </label>
-          <input
-            type="text"
+          <select
             value={artist.genre}
             onChange={(e) => setArtist({ ...artist, genre: e.target.value })}
-            className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary text-sm focus:outline-none focus:border-accent-from/60 transition-colors"
-          />
+            className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary text-sm focus:outline-none focus:border-accent-from/60 transition-colors appearance-none cursor-pointer"
+          >
+            <option value="">Select genre</option>
+            {["Hip-Hop", "R&B", "Pop", "Rock", "Country", "Jazz", "Latin", "Electronic", "Classical", "Gospel", "Reggae", "Soul", "Afrobeats", "Alternative", "Indie", "Metal", "Punk", "Blues", "Folk", "Dancehall"].map((g) => (
+              <option key={g} value={g}>{g}</option>
+            ))}
+          </select>
         </div>
 
         <div>
@@ -110,16 +114,17 @@ export default function ProfilePage() {
 
         <div>
           <label className="block text-text-secondary text-xs uppercase tracking-wider mb-2">
-            Price ($)
+            Price
           </label>
-          <input
-            type="number"
+          <select
             value={artist.price}
-            onChange={(e) =>
-              setArtist({ ...artist, price: Number(e.target.value) })
-            }
-            className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary text-sm focus:outline-none focus:border-accent-from/60 transition-colors"
-          />
+            onChange={(e) => setArtist({ ...artist, price: Number(e.target.value) })}
+            className="w-full bg-surface-2 border border-border rounded-lg px-4 py-3 text-text-primary text-sm focus:outline-none focus:border-accent-from/60 transition-colors appearance-none cursor-pointer"
+          >
+            {[1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000].map((p) => (
+              <option key={p} value={p}>${p.toLocaleString()}</option>
+            ))}
+          </select>
         </div>
 
         <div className="flex items-center gap-4">

@@ -26,7 +26,10 @@ export default function OrderCard({ order }: OrderCardProps) {
       className="block bg-surface-1 border border-border rounded-xl p-6 hover:border-accent-from/40 transition-colors"
     >
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-text-primary font-medium">{order.collectorName}</h3>
+        <div>
+          <span className="font-display text-2xl bg-gradient-to-r from-accent-from to-accent-to bg-clip-text text-transparent">${(order.totalPrice / 100).toLocaleString()}</span>
+          <span className="text-text-secondary text-sm ml-2">— {order.collectorName}</span>
+        </div>
         <span
           className={`text-xs px-3 py-1 rounded-full uppercase tracking-wider ${
             statusColors[order.status] || "bg-surface-3 text-text-secondary"
@@ -39,10 +42,7 @@ export default function OrderCard({ order }: OrderCardProps) {
         {order.vision}
       </p>
       <div className="flex items-center justify-between text-xs text-text-secondary">
-        <span className="capitalize">{order.occasion}</span>
-        <span>
-          ${(order.totalPrice / 100).toLocaleString()}
-        </span>
+        <span className="capitalize bg-surface-3 text-text-secondary px-2.5 py-0.5 rounded-full">{order.occasion}</span>
       </div>
     </Link>
   );

@@ -76,7 +76,7 @@ export default function AuthModal({ isOpen, onClose, artistSlug }: AuthModalProp
     if (artistSlug) {
       window.location.href = `/commission/${artistSlug}`;
     } else {
-      window.location.reload();
+      window.location.href = "/collection";
     }
   };
 

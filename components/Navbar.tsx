@@ -2,15 +2,20 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/constants";
 import AuthModal from "./AuthModal";
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [showAuth, setShowAuth] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Hide on dashboard and login pages (they have their own nav)
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/collection") || pathname === "/login") return null;
 
   // Close dropdown on outside click
   useEffect(() => {

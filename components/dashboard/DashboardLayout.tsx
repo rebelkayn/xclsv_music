@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: "⌂" },
-  { href: "/dashboard/profile", label: "Profile", icon: "◉" },
-  { href: "/dashboard/orders", label: "Orders", icon: "♫" },
+  { href: "/dashboard", label: "Dashboard", icon: "home" },
+  { href: "/dashboard/profile", label: "Profile", icon: "profile" },
+  { href: "/dashboard/orders", label: "Orders", icon: "orders" },
 ];
 
 export default function DashboardLayout({
@@ -49,7 +49,7 @@ export default function DashboardLayout({
                     : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
                 }`}
               >
-                <span className="text-base">{item.icon}</span>
+                <NavIcon type={item.icon} />
                 {item.label}
               </Link>
             );
@@ -88,4 +88,34 @@ export default function DashboardLayout({
       <main className="flex-1 p-8 overflow-y-auto">{children}</main>
     </div>
   );
+}
+
+function NavIcon({ type }: { type: string }) {
+  const cls = "w-[18px] h-[18px] flex-shrink-0";
+  switch (type) {
+    case "home":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M3 12l9-9 9 9" />
+          <path d="M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10" />
+        </svg>
+      );
+    case "profile":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M5 20c0-3 3-5 7-5s7 2 7 5" />
+        </svg>
+      );
+    case "orders":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+          <rect x="9" y="3" width="6" height="4" rx="1" />
+          <path d="M9 14l2 2 4-4" />
+        </svg>
+      );
+    default:
+      return null;
+  }
 }
